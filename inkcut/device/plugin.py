@@ -386,7 +386,7 @@ class Device(Model):
     queue = List(Model).tag(config=True)
 
     #: Current job being processed
-    job = Instance(Model)#.tag(config=True)
+    job = Instance(Model)  # .tag(config=True)
 
     #: The device specific config
     config = Instance(DeviceConfig, ()).tag(config=True)
@@ -695,7 +695,7 @@ class Device(Model):
                     if config.step_time > 0:
                         rate = config.step_size/float(config.step_time)
                     else:
-                        rate = 0 # Undefined
+                        rate = 0  # Undefined
                 else:
                     rate = from_unit(
                         config.speed,  # in/s or cm/s
@@ -743,7 +743,7 @@ class Device(Model):
 
                 self.status = "Connecting to device"
                 with self.device_connection(
-                                test or config.test_mode) as connection:
+                        test or config.test_mode) as connection:
                     self.status = "Processing job"
                     try:
                         yield defer.maybeDeferred(self.connect)
@@ -813,7 +813,7 @@ class Device(Model):
                             #: Set the job progress based on how far we've gone
                             if total_length > 0:
                                 info.progress = int(max(0, min(100,
-                                                100*total_moved/total_length)))
+                                                               100*total_moved/total_length)))
 
                         if info.status != 'error':
                             #: We're done, send any finalization commands
@@ -964,7 +964,7 @@ class Device(Model):
                         #: the first point d=0 so t=0, the last point d=l so t=1
                         t = subpath.percentAtLength(d)
                         sp = subpath.pointAtPercent(t)
-                        #if d == l:
+                        # if d == l:
                         #    break  #: Um don't we want to send the last point??
 
                         x, y = sp.x(), sp.y()
@@ -1037,6 +1037,7 @@ class DevicePlugin(Plugin):
         with enaml.imports():
             from .transports.raw.manifest import RawFdManifest
             from .transports.serialport.manifest import SerialManifest
+            from .transports.ethernet.manifest import EthernetManifest
             from .transports.printer.manifest import PrinterManifest
             from .transports.disk.manifest import FileManifest
             from .transports.parallelport.manifest import ParallelManifest
@@ -1045,6 +1046,7 @@ class DevicePlugin(Plugin):
             from inkcut.device.filters.manifest import FiltersManifest
             from inkcut.device.pi.manifest import PiManifest
             plugins.append(RawFdManifest)
+            plugins.append(EthernetManifest)
             plugins.append(SerialManifest)
             plugins.append(PrinterManifest)
             plugins.append(FileManifest)
