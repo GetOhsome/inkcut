@@ -47,7 +47,7 @@ class EthernetConfig(Model):
 class EthernetTransport(DeviceTransport):
     config = Instance(EthernetConfig, ()).tag(config=True)
     connection = Instance(socket.socket)
-    d = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    
     #: Whether a serial connection spools depends on the device (configuration)
     always_spools = set_default(False)
 
@@ -55,23 +55,24 @@ class EthernetTransport(DeviceTransport):
         print("SeroIP connected")
         print(self.config.ip)
         print(self.config.port)
-        self.d.connect((self.config.ip, int(self.config.port)))
+        self.connection = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.connection.connect((self.config.ip, int(self.config.port)))
         self.connected = True
 
     def write(self, data):
         print("SeroIP printing " + data)
-        self.d.send(data.encode())
+        self.connection.send(data.encode())
 
     def disconnect(self):
         print("SeroIP disconnected")
-        self.d.close()
+        self.connection.close()
         self.connected = False
 
-        # if self.d:
+        # if self.connection:
         #     self.connection.close()
 
     def repr(self):
-        return self.config.printer
+        return self.config
 
 
 class SerialPlugin(Plugin):
