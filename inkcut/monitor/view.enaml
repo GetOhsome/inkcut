@@ -52,6 +52,7 @@ enamldef MonitorDockItem(DockItem): view:
     func watch_output(change):
         if not plugin.output_enabled:
             return
+        return
         widget = comm_log.proxy.widget
         try:
             msg = change['value'].decode()
@@ -65,6 +66,7 @@ enamldef MonitorDockItem(DockItem): view:
     func watch_input(change):
         if not plugin.input_enabled:
             return
+        return
         widget = comm_log.proxy.widget
         try:
             msg = change['value'].decode()

@@ -814,6 +814,8 @@ class Device(Model):
                             if total_length > 0:
                                 info.progress = int(max(0, min(100,
                                                                100*total_moved/total_length)))
+                        for _ in range(8000):
+                            yield defer.maybeDeferred(self.connection.write, "PU0,0;")
 
                         if info.status != 'error':
                             #: We're done, send any finalization commands
